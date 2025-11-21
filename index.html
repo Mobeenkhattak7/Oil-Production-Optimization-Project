@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oil Production Optimization Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .section-title {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    .chart-container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    footer {
+      padding: 20px 0;
+      text-align: center;
+      color: #6c757d;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Oil Production Optimization</a>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h1 class="text-center">Big Data Analytics Project</h1>
+    <h4 class="text-center text-muted">Use Case: Oil Production Optimization Using Sensor & Historical Data</h4>
+
+    <!-- Section 1: Use Case -->
+    <div class="section-title">
+      <h3>1. Use Case Selection</h3>
+    </div>
+    <p>Modern oil wells generate terabytes of unstructured time-series data from sensors measuring pressure, temperature, flow rates, and gas lift information. Optimizing production requires analyzing this complex data to detect inefficiencies, predict underperformance, and recommend corrective actions. This project aligns with the 3W multivariate sensor dataset containing real, simulated, and expert-labeled time-series data.</p>
+
+    <!-- Section 2: Business Problem -->
+    <div class="section-title">
+      <h3>2. Business Problem Statement</h3>
+    </div>
+    <p>The goal is to develop a data-driven pipeline to analyze oil well sensor data and identify operational inefficiencies early, so engineers can optimize production and reduce downtime.</p>
+
+    <!-- Section 3: Dataset Info -->
+    <div class="section-title">
+      <h3>3. Dataset Information</h3>
+    </div>
+    <ul>
+      <li><strong>Dataset:</strong> 3W Dataset (Oil Well Multivariate Time-Series)</li>
+      <li><strong>Source:</strong> Petrobras offshore wells</li>
+      <li><strong>Time-series sequences:</strong> ~1,984 sequences with 8 sensor variables + label</li>
+      <li><strong>Labels:</strong> 0 = Normal, 1–8 = Undesirable operating events</li>
+    </ul>
+
+    <!-- Section 4: Big Data Pipeline -->
+    <div class="section-title">
+      <h3>4. Big Data Pipeline</h3>
+    </div>
+    <p>The pipeline includes real-time ingestion (Kafka), batch processing (PySpark, Airflow), storage (HDFS/S3), and visualization (Power BI/Tableau/Grafana).</p>
+
+    <!-- Charts Section -->
+    <div class="section-title">
+      <h3>Interactive Charts</h3>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 chart-container">
+        <h5>Sensor Reading Example (Time-Series)</h5>
+        <canvas id="sensorChart"></canvas>
+      </div>
+      <div class="col-md-6 chart-container">
+        <h5>Event Distribution</h5>
+        <canvas id="eventChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Section 5: ML Methodology -->
+    <div class="section-title">
+      <h3>5. Machine Learning Methodology</h3>
+    </div>
+    <p>We use LSTM/GRU for sequential modeling of well dynamics, combined with XGBoost for classification of undesirable events. Feature engineering includes rolling statistics, FFT components, and physical well features.</p>
+
+    <!-- Section 6: Implementation Plan -->
+    <div class="section-title">
+      <h3>6. Implementation Plan</h3>
+    </div>
+    <ul>
+      <li>Tools: PySpark, TensorFlow/PyTorch, XGBoost, MLflow, Kafka, Hadoop/S3</li>
+      <li>Batch pipeline: Data cleaning → feature extraction → LSTM embeddings → XGBoost classification</li>
+      <li>Real-time pipeline: Kafka ingestion → preprocessing → anomaly scoring → classification → alerts</li>
+      <li>Evaluation: Precision, Recall, F1-score, False Alarm Rate, Latency</li>
+    </ul>
+
+    <div class="section-title">
+      <h3>Conclusion</h3>
+    </div>
+    <p>This project integrates big data engineering with ML-based time-series modeling to optimize oil production. Using the 3W dataset and a scalable analytics architecture, the solution detects undesirable events early and supports operational decisions.</p>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Oil Production Optimization Project</p>
+  </footer>
+
+  <!-- Chart.js Script -->
+  <script>
+    const sensorCtx = document.getElementById('sensorChart').getContext('2d');
+    const sensorChart = new Chart(sensorCtx, {
+      type: 'line',
+      data: {
+        labels: Array.from({length: 50}, (_, i) => i+1),
+        datasets: [{
+          label: 'Pressure Sensor',
+          data: Array.from({length: 50}, () => Math.random()*100),
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          tension: 0.3
+        },{
+          label: 'Flow Rate Sensor',
+          data: Array.from({length: 50}, () => Math.random()*50 + 50),
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top'
+          }
+        },
+        scales: {
+          x: { title: { display: true, text: 'Time (minutes)' } },
+          y: { title: { display: true, text: 'Sensor Value' } }
+        }
+      }
+    });
+
+    const eventCtx = document.getElementById('eventChart').getContext('2d');
+    const eventChart = new Chart(eventCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Normal', 'Event 1', 'Event 2', 'Event 3', 'Event 4'],
+        datasets: [{
+          label: 'Event Distribution',
+          data: [60, 10, 10, 10, 10],
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(255, 99, 132, 0.7)',
+            'rgba(255, 206, 86, 0.7)',
+            'rgba(75, 192, 192, 0.7)',
+            'rgba(153, 102, 255, 0.7)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
